@@ -1,0 +1,3 @@
+* maintain content's title uppon edit
+* add validator that check if the file exist during creation
+* verify what happens if the file id already exists
