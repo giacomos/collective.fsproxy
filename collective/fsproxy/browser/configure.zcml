@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.fsproxy">
+
+  <include package="plone.app.contentmenu" />
+
+  <!-- -*- extra stuff goes here -*- -->
+  <browser:page
+      name="file_view"
+      for="collective.fsproxy.interfaces.IProxyFile"
+      class=".proxyfile.ProxyFileView"
+      permission="zope2.View"
+      allowed_attributes="direct_url file_size downloadicon_name getIcon"
+      />
+
+</configure>
