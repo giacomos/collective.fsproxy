@@ -6,20 +6,32 @@
   <include package="plone.app.contentmenu" />
   <include package="Products.CMFCore" />
 
-  <!-- -*- extra stuff goes here -*- -->
+  <browser:resourceDirectory
+      name="collective.fsproxy.images"
+      directory="images"
+      layer=".interfaces.IFSProxyLayer"
+      />
+  
   <browser:page
-      name="file_view"
+      name="view"
       for="collective.fsproxy.interfaces.IProxyFile"
       class=".proxyfile.ProxyFileView"
+      template="proxyfile_view.pt"
       permission="zope2.View"
       allowed_attributes="direct_url file_size downloadicon_name getIcon"
+      layer=".interfaces.IFSProxyLayer"
       />
+  <browser:defaultView
+      for="collective.fsproxy.interfaces.IProxyFile"
+      name="view"/>
+
 
   <browser:view
       name="resync"
       for="collective.fsproxy.interfaces.IProxyFolder"
       class=".foldersync.FolderSyncView"
       permission="cmf.ManagePortal"
+      layer=".interfaces.IFSProxyLayer"
       />
 
 </configure>

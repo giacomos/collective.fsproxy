@@ -6,7 +6,7 @@
   <property name="description"
     i18n:translate="">Description of the Example Type</property>
   <property name="content_meta_type">ProxyFolder</property>
-  <property name="content_icon">folder_icon.gif</property>
+  <property name="content_icon">++resource++collective.fsproxy.images/proxyfolder.gif</property>
   <property name="product">collective.fsproxy</property>
   <property name="factory">addProxyFolder</property>
   <property name="immediate_view">atct_edit</property>

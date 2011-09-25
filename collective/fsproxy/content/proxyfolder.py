@@ -171,6 +171,9 @@ class ProxyFolder(folder.ATFolder):
             bl = list(parent.getField('blacklist').get(parent))
         return bl
 
+    def getIcon(self, context):
+        return self.portal_url() + "/folder_icon.gif"
+
     def getAquiredKeywords(self):
         """ Builds a blacklist aquiring from parents"""
         parent = self

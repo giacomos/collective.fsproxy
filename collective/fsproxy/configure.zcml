@@ -21,9 +21,6 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <!-- File System Directory Views registration -->
-  <cmf:registerDirectory name="collective_fsproxy"/>
-
   <!--<subscriber
       for="collective.fsproxy.interfaces.IProxyFolder
            zope.app.container.interfaces.IContainerModifiedEvent"

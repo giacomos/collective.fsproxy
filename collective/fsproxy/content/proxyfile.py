@@ -17,6 +17,7 @@ from collective.fsproxy import fsproxyMessageFactory as _
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
+from plone.app.blob.subtypes.file import ExtensionBlobField 
 
 pathseparator = os.path.normcase('/')
 
@@ -42,7 +43,7 @@ ProxyFileSchema['description'].storage = atapi.AnnotationStorage()
 schemata.finalizeATCTSchema(ProxyFileSchema, moveDiscussion=False)
 
 
-class ProxyFile(base.ATCTContent):
+class ProxyFile(base.ATCTFileContent):
     """Description of the Example Type"""
     implements(IProxyFile)
 
@@ -78,6 +79,13 @@ class ProxyFile(base.ATCTContent):
             self.setTitle(new_id)
             self.reindexObject()
             return new_id
+
+    def post_validate(self, REQUEST=None, errors=None):
+        pass
+
+    @property
+    def data(self):
+        return self.get_data()
 
     def get_data(self):
         if self.file_exists():
@@ -149,6 +157,19 @@ class ProxyFile(base.ATCTContent):
         RESPONSE.setHeader('Content-Disposition', 'attachment;filename=' + self.filename())
 #        RESPONSE.setHeader('Content-Length', len(str(sdata))) 
         return RESPONSE.write(tmp.read())
+
+    def getPrimaryField(self):
+        return ExtensionBlobField()
+
+    def getFile(self):
+        return self
+
+#    security.declareProtected(View, 'index_html')
+    def index_html(self, REQUEST=None, RESPONSE=None):
+        """ """
+#        pass
+        return self.download()
+
 
     security.declareProtected(View, 'get_content_type')
     def get_content_type(self):
