@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="plone">
+
+<div metal:fill-slot="content-core">
+    <dl class="portalMessage error" tal:condition="not:here/file_exists">
+
+        <dt i18n:translate="">Error</dt>
+        <dd><span i18n:translate="">No such file or directory in filesystem</span></dd>
+    </dl>
+
+    <div metal:define-macro="main"
+         tal:define="view here/@@file_view">
+
+        <p tal:define="downloadURL view/direct_url">
+            <a tal:condition="here/file_exists"
+               tal:attributes="href downloadURL"
+               tal:define="filename python:here.getFilename('downloadableFile')">
+               <img tal:attributes="src python: '/'.join([here.portal_url(), here.getIcon(here)])" />
+               <span tal:omit-tag="" tal:content="here/filename">filename</span>
+           </a>
+           <span tal:condition="not:here/file_exists"
+               tal:define="filename python:here.getFilename('downloadableFile')">
+               <img tal:attributes="src python: '/'.join([here.portal_url(), here.getIcon(here)])" />
+               <span tal:omit-tag="" tal:content="here/filename">filename</span>
+           </span>
+           <span class="discreet"> &mdash; 
+               <span tal:replace="here/mimetype_name"/>
+               <tal:size define="size here/file_size;
+                   size_kb python:size/1024;
+                   display_size_kb python:'{0:n} kB'.format(size_kb) if size_kb > 0 else '';
+                   display_size_bytes python:' ({0:n} bytes)'.format(size) if display_size_kb else '{0:n} bytes'.format(size);
+                   display_size python:'{0}{1}'.format(display_size_kb, display_size_bytes)"
+                          condition="size">
+                    <tal:size content="display_size">?</tal:size> 
+                </tal:size>
+            </span>
+        </p>
+        <div tal:condition="python: here.mime_type().startswith('text') and here.file_exists()">
+            <h2 i18n:translate="heading_file_contents">File contents</h2>
+            <pre tal:content="here/get_data|context/data|nothing">
+            </pre>
+        </div>
+
+    </div>
+
+</div>
+
+</html>
