@@ -2,6 +2,7 @@
 """
 import os
 import mimetypes
+import transaction
 from zope.interface import implements
 
 from Products.Archetypes import atapi
@@ -37,6 +38,7 @@ ProxyFileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 # they work well with the python bridge properties.
 
 ProxyFileSchema['title'].storage = atapi.AnnotationStorage()
+ProxyFileSchema['title'].required = False
 ProxyFileSchema['description'].storage = atapi.AnnotationStorage()
 
 schemata.finalizeATCTSchema(ProxyFileSchema, moveDiscussion=False)
@@ -48,33 +50,70 @@ class ProxyFile(base.ATCTContent):
 
     meta_type = "ProxyFile"
     schema = ProxyFileSchema
+    _at_rename_after_creation = True
 
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
     security = ClassSecurityInfo()
 
     # -*- Your ATSchema to Python Property Bridges Here ... -*-
-    def getObjSize(self):
-        return self.file_size()
+    security.declarePrivate('_renameAfterCreation')
+    def _renameAfterCreation(self, check_auto_id=False):
+        """Renames an object like its normalized title.
+        """
+        path = self.getField('fsposition').get(self)
+#        pu = getToolByName(self, 'plone_utils')
+#        new_id = pu.normalizeString(self.filename())
+        new_id = self.filename()
+        invalid_id = False
+        check_id = getattr(self, 'check_id', None)
+        if check_id is not None:
+            invalid_id = check_id(new_id, required=1)
+        else:
+            # If check_id is not available just look for conflicting ids
+            parent = aq_parent(aq_inner(self))
+            invalid_id = new_id in parent.objectIds()
+
+        if not invalid_id:
+            # Can't rename without a subtransaction commit when using
+            # portal_factory!
+            transaction.commit()
+            self.setId(new_id)
+            self.setTitle(new_id)
+            self.reindexObject()
+            return new_id
 
     def get_data(self):
-        field = self.getField('fsposition')
-        path = field.get(self)
-        tmp = open(path, 'r')
-        return tmp.read()
+        if self.file_exists():
+            tmp = self.get_file()
+            return tmp.read()
+        else:
+            return ''
+
+    def file_exists(self):
+        try:
+            open(self.getField('fsposition','r').get(self))
+            return True
+        except IOError as e:
+            return False
+    def get_file(self):
+        return open(self.getField('fsposition','r').get(self))
+               
 
     security.declareProtected(View, 'size')
     def file_size(self):
         """Get size (image_view.pt)
         """
-        field = self.getField('fsposition')
-        path = field.get(self)
-        return os.path.getsize(path)
+        try:
+            path = self.getField('fsposition').get(self)
+            return os.path.getsize(path)
+        except:
+            return 0
 
     def filename(self):
         field = self.getField('fsposition')
         path = field.get(self)
-        filename = path.rsplit('/',1)[1]
+        filename = path.split('/')[-1]
         return filename
 
     def mime_type(self):

@@ -6,12 +6,17 @@ from collective.fsproxy import config
 
 from Products.Archetypes import atapi
 from Products.CMFCore import utils
+from Products.CMFCore.utils import ContentInit
+from Products.validation import validation
+from collective.fsproxy.validators import isValidFilesystemPath
+from collective.fsproxy import permissions
 
 # Define a message factory for when this product is internationalised.
 # This will be imported with the special name "_" in most modules. Strings
 # like _(u"message") will then be extracted by i18n tools for translation.
 
 fsproxyMessageFactory = MessageFactory('collective.fsproxy')
+validation.register(isValidFilesystemPath())
 
 
 def initialize(context):
@@ -43,7 +48,7 @@ def initialize(context):
     # in the GenericSetup profile.
 
     for atype, constructor in zip(content_types, constructors):
-        utils.ContentInit('%s: %s' % (config.PROJECTNAME, atype.portal_type),
+        ContentInit('%s: %s' % (config.PROJECTNAME, atype.portal_type),
             content_types=(atype, ),
             permission=config.ADD_PERMISSIONS[atype.portal_type],
             extra_constructors=(constructor,),

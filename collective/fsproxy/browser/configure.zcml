@@ -4,6 +4,7 @@
     i18n_domain="collective.fsproxy">
 
   <include package="plone.app.contentmenu" />
+  <include package="Products.CMFCore" />
 
   <!-- -*- extra stuff goes here -*- -->
   <browser:page
@@ -12,6 +13,13 @@
       class=".proxyfile.ProxyFileView"
       permission="zope2.View"
       allowed_attributes="direct_url file_size downloadicon_name getIcon"
+      />
+
+  <browser:view
+      name="resync"
+      for="collective.fsproxy.interfaces.IProxyFolder"
+      class=".foldersync.FolderSyncView"
+      permission="cmf.ManagePortal"
       />
 
 </configure>

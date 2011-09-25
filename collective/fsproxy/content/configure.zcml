@@ -6,6 +6,12 @@
   <!-- configure your content components here -->
   
   <!-- -*- extra stuff goes here -*- -->
+  <class class=".proxyfolder.ProxyFolder">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IProxyFolder"
+        />
+  </class>
   <class class=".proxyfile.ProxyFile">
     <require
         permission="zope2.View"
