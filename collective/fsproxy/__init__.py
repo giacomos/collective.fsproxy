@@ -9,6 +9,7 @@ from Products.CMFCore import utils
 from Products.CMFCore.utils import ContentInit
 from Products.validation import validation
 from collective.fsproxy.validators import isValidFilesystemPath
+from collective.fsproxy.validators import isValidFilesystemFile
 from collective.fsproxy import permissions
 
 # Define a message factory for when this product is internationalised.
@@ -17,6 +18,7 @@ from collective.fsproxy import permissions
 
 fsproxyMessageFactory = MessageFactory('collective.fsproxy')
 validation.register(isValidFilesystemPath())
+validation.register(isValidFilesystemFile())
 
 
 def initialize(context):

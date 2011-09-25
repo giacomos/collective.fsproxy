@@ -18,13 +18,14 @@ from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
 
+pathseparator = os.path.normcase('/')
+
 ProxyFileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
-    # -*- Your Archetypes field definitions here ... -*-
     atapi.StringField(
         name='fsposition',
         required=1,
-#        validators=('isURL',),
+        validators=('isValidFilesystemFile',),
         widget=atapi.StringWidget(
             label=_(u"label_file_fs_position", default=u"Filesystem position for file to proxy"),
             description=_(u"help_file_position", default=u"Please enter the filesystem position where the file is."),
@@ -33,9 +34,6 @@ ProxyFileSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ),
 
 ))
-
-# Set storage on fields copied from ATContentTypeSchema, making sure
-# they work well with the python bridge properties.
 
 ProxyFileSchema['title'].storage = atapi.AnnotationStorage()
 ProxyFileSchema['title'].required = False
@@ -62,8 +60,6 @@ class ProxyFile(base.ATCTContent):
         """Renames an object like its normalized title.
         """
         path = self.getField('fsposition').get(self)
-#        pu = getToolByName(self, 'plone_utils')
-#        new_id = pu.normalizeString(self.filename())
         new_id = self.filename()
         invalid_id = False
         check_id = getattr(self, 'check_id', None)
@@ -111,9 +107,8 @@ class ProxyFile(base.ATCTContent):
             return 0
 
     def filename(self):
-        field = self.getField('fsposition')
-        path = field.get(self)
-        filename = path.split('/')[-1]
+        path = self.getField('fsposition').get(self)
+        filename = path.split(pathseparator)[-1]
         return filename
 
     def mime_type(self):

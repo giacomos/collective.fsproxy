@@ -20,17 +20,14 @@
       description=""
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-  
-  <!-- -*- extra stuff goes here -*- -->
 
   <!-- File System Directory Views registration -->
   <cmf:registerDirectory name="collective_fsproxy"/>
 
-  <!--  <subscriber
+  <!--<subscriber
       for="collective.fsproxy.interfaces.IProxyFolder
-           zope.app.container.interfaces.IObjectAddedEvent"                 
+           zope.app.container.interfaces.IContainerModifiedEvent"
       handler=".subscribers.syncUpponProxyFolderCreation"
-      />
--->
+      />-->
 
 </configure>

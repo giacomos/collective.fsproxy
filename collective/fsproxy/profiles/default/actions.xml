@@ -1,17 +1,18 @@
 <?xml version="1.0"?>
 <object name="portal_actions" meta_type="Plone Actions Tool"
    xmlns:i18n="http://xml.zope.org/namespaces/i18n">
- <object name="object_buttons" meta_type="CMF Action Category">
+ <object name="object" meta_type="CMF Action Category">
 
   <object name="sync" meta_type="CMF Action">
-   <property name="title">Sync</property>
+   <property name="title">Syncronize</property>
    <property name="description"></property>
    <property name="url_expr">string:$object_url/@@resync</property>
    <property name="link_target"></property>
-   <property name="icon_expr">string:${portal_url}/proxyfile.png</property>
    <property
       name="available_expr">python: context.portal_type=="Proxy Folder"</property>
-   <property name="permissions"/>
+   <property name="permissions">
+      <element value="collective.fsproxy: Add Proxy Folder"/>
+   </property>
    <property name="visible">True</property>
   </object>
  </object>

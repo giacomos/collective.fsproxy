@@ -1,5 +1,2 @@
-* maintain content's title uppon edit
-* add validator that check if the file exist during creation
-* verify what happens if the file id already exists
 * the last modification date could be proxied
 * add a control panel section to provide global blacklists
