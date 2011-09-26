@@ -134,6 +134,7 @@ class ProxyFile(base.ATCTFileContent):
             return res[0].icon_path
         else:
             return "application.png"
+
     def mimetype_name(self):
         mtr = getToolByName(self, 'mimetypes_registry')
         res = mtr.lookup(self.mime_type())
@@ -167,7 +168,6 @@ class ProxyFile(base.ATCTFileContent):
 #    security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
         """ """
-#        pass
         return self.download()
 
 

@@ -13,7 +13,7 @@
       />
   
   <browser:page
-      name="view"
+      name="file_view"
       for="collective.fsproxy.interfaces.IProxyFile"
       class=".proxyfile.ProxyFileView"
       template="proxyfile_view.pt"
@@ -23,7 +23,7 @@
       />
   <browser:defaultView
       for="collective.fsproxy.interfaces.IProxyFile"
-      name="view"/>
+      name="file_view"/>
 
 
   <browser:view

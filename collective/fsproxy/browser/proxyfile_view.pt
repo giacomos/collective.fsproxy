@@ -14,8 +14,7 @@
         <dd><span i18n:translate="">No such file or directory in filesystem</span></dd>
     </dl>
 
-    <div metal:define-macro="main"
-         tal:define="view here/@@file_view">
+    <div metal:define-macro="main">
 
         <p tal:define="downloadURL view/direct_url">
             <a tal:condition="here/file_exists"
